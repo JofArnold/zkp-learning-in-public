@@ -9,7 +9,8 @@
     "@projects/*"
   ],
   "scripts": {
-    "upgrade-all-deps" : "yarn run ncu -u --reject @types/node && yarn workspaces run upgradedeps"
+    "upgrade-all-deps" : "yarn run ncu -u --reject @types/node && yarn workspaces run upgradedeps",
+    "lint:solidity" : "prettier --write 'contracts/**/*.sol'"
   },
   "dependencies": {},
   "devDependencies": {
