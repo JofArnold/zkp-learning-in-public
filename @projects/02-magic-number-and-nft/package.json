@@ -8,7 +8,8 @@
   "scripts": {
     "zokrates:run": "docker run -v $(pwd):/home/zokrates/code -ti zokrates/zokrates /bin/bash",
     "upgradedeps": "ncu -u --reject @types/node",
-    "contracts:test": "npx hardhat test tests/*"
+    "contracts:test": "npx hardhat test tests/*",
+    "lint:solidity" : "prettier --write 'contracts/**/*.sol'"
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "2.0.2",
