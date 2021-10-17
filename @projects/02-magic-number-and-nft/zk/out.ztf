@@ -1,0 +1,4 @@
+def main(private _0, private _1, private _2, private _3, private _4) -> (1):
+	(1 * ~one) * (1 * _0 + 1 * _1 + 1 * _2 + 1 * _3 + 1 * _4) == 5 * ~one
+	(1 * ~one) * (1 * ~one) == 1 * ~out_0
+	return ~out_0
