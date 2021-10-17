@@ -1,0 +1,2 @@
+def main(private field x, private field y) -> bool:
+  return x * y + 4 == 10

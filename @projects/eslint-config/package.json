@@ -1,0 +1,20 @@
+{
+  "name": "@projects/eslint-config",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "8.0.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.26.1",
+    "@typescript-eslint/eslint-plugin": "5.0.0",
+    "eslint-config-prettier": "8.3.0",
+    "@typescript-eslint/parser": "5.0.0",
+    "prettier": "2.4.1",
+    "typescript": "4.4.4",
+    "@projects/prettier-config": "1.0.0"
+  }
+}
