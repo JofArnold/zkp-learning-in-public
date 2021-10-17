@@ -28,7 +28,7 @@
   ],
   "outputs": [
     {
-      "type": "bool"
+      "type": "field"
     }
   ]
 }

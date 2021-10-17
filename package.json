@@ -9,19 +9,21 @@
     "@projects/*"
   ],
   "scripts": {
-    "upgrade-all-deps" : "yarn run ncu -u --reject @types/node && yarn workspaces run upgradedeps",
-    "lint:solidity" : "prettier --write 'contracts/**/*.sol'"
+    "upgrade-all-deps": "yarn run ncu -u --reject @types/node && yarn workspaces run upgradedeps",
+    "lint:solidity": "prettier --write 'contracts/**/*.sol'"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zokrates-js": "1.0.36"
+  },
   "devDependencies": {
-    "@types/node": "16.11.0",
     "@types/chai": "4.2.22",
     "@types/mocha": "9.0.0",
+    "@types/node": "16.11.0",
+    "@typescript-eslint/eslint-plugin": "5.0.0",
     "eslint": "8.0.1",
-    "npm-check-updates": "11.8.5",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.26.1",
-    "@typescript-eslint/eslint-plugin": "5.0.0",
+    "npm-check-updates": "11.8.5",
     "prettier": "2.4.1",
     "typescript": "4.4.4"
   },
