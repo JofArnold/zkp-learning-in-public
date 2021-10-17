@@ -1,0 +1,34 @@
+{
+  "name": "@projects/1-simple-algebraic-expression",
+  "version": "1.0.0",
+  "description": "Learning zero knowledge proofs in public",
+  "author": "Jof Arnold",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "zokrates:run": "docker run -v $(pwd):/home/zokrates/code -ti zokrates/zokrates /bin/bash",
+    "upgradedeps": "ncu -u --reject @types/node",
+    "contracts:test": "npx hardhat test tests/*"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "2.0.2",
+    "@nomiclabs/hardhat-waffle": "2.0.1",
+    "@openzeppelin/contracts": "4.3.2",
+    "ethereum-waffle": "3.4.0",
+    "ethers": "5.4.7",
+    "hardhat": "2.6.6"
+  },
+  "devDependencies": {
+    "@types/chai": "4.2.22",
+    "chai": "4.3.4",
+    "@projects/eslint-config": "1.0.0",
+    "@projects/prettier-config": "1.0.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.26.1",
+    "@typescript-eslint/eslint-plugin": "5.0.0",
+    "prettier": "2.4.1",
+    "typescript": "4.4.4",
+    "@typescript-eslint/parser": "5.0.0"
+  }
+
+}
