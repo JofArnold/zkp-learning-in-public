@@ -12,12 +12,18 @@ describe("NFT tests", () => {
     const nft = await NFTPrize.deploy();
     await nft.deployed();
 
+    // Generate proof
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
       { a: 3, b: 11 },
       path.resolve(__dirname, "../zk/circuit.wasm"),
       path.resolve(__dirname, "../zk/circuit_final.zkey")
     );
     const callArgs = buildContractCallArgs(proof, publicSignals);
+    // const res = await snarkjs.groth16.verify(vkey, publicSignals, proof); // check that it works
+    // const vkey = require(path.resolve(
+    //   __dirname,
+    //   "../zk/verification_key.json"
+    // ));
     const transaction = await nft
       .connect(signer1)
       .validateAndMintToken(...callArgs); // Try minting the token
