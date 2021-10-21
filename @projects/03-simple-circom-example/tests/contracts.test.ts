@@ -19,11 +19,8 @@ describe("NFT tests", () => {
       path.resolve(__dirname, "../zk/circuit_final.zkey")
     );
     const callArgs = buildContractCallArgs(proof, publicSignals);
-    // const res = await snarkjs.groth16.verify(vkey, publicSignals, proof); // check that it works
-    // const vkey = require(path.resolve(
-    //   __dirname,
-    //   "../zk/verification_key.json"
-    // ));
+
+    // Try minting token
     const transaction = await nft
       .connect(signer1)
       .validateAndMintToken(...callArgs); // Try minting the token
