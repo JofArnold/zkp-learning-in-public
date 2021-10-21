@@ -1,27 +1,32 @@
-const snarkjs = require("snarkjs");
+const { initialize } = require("zokrates-js/node");
 const fs = require("fs");
+const path = require("path");
 
-async function run() {
-  const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-    { a: 10, b: 21 },
-    "circuit.wasm",
-    "circuit_final.zkey"
+const generateJSProof = async toCheck => {
+  const values = [...toCheck]; //.map(s => parseInt(s, 10));
+  // --------------------------------------------------------------------------------
+  // Get the various bits of data we need
+
+  const zokratesProvider = await initialize();
+  const source = fs.readFileSync(
+    path.resolve(__dirname, "../zk/magicNumber.zok"),
+    "utf-8"
+  );
+  const artefacts = zokratesProvider.compile(source);
+  const { witness } = zokratesProvider.computeWitness(artefacts, values);
+  const provingKey = fs.readFileSync(
+    path.resolve(__dirname, "../zk/proving.key")
   );
 
-  console.log("Proof: ");
-  console.log(JSON.stringify(proof, null, 1));
+  // --------------------------------------------------------------------------------
+  // Compute the proof (this will fail if the users gets it wrong)
 
-  const vKey = JSON.parse(fs.readFileSync("verification_key.json"));
+  const proof = zokratesProvider.generateProof(
+    artefacts.program,
+    witness,
+    provingKey
+  );
+  return proof;
+};
 
-  const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
-
-  if (res === true) {
-    console.log("Verification OK");
-  } else {
-    console.log("Invalid proof");
-  }
-}
-
-run().then(() => {
-  process.exit(0);
-});
+module.exports = { generateJSProof };
