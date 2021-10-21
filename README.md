@@ -13,4 +13,4 @@ Using ZoKrates, proof is generates for the  above linear express. It's tested wi
 
 ### 2) Another simple proof, but with simple integrations with NFTs and JS.
 
-Using ZoKrates again, this is a more advanced example in terms of integrating ZKPs with JavaScript. Goal is to replicate something like a game-experience but without delving deep into more advanced ZKPs. Code: [2-magic-number-and-nft](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/02-magic-number-and-nft)
+Using ZoKrates again, this is a more advanced example in terms of integrating ZKPs with JavaScript. Goal is to replicate something like a game-experience but without delving deep into more advanced ZKPs. Code: [02-magic-number-and-nft](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/02-magic-number-and-nft)
