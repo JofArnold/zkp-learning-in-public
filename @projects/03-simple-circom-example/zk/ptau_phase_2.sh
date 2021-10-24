@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 # Check if input.json exists to define the inputs for your witness. If not, exist
 
 if [[ ! -f input.json ]] ; then
