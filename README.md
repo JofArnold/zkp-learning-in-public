@@ -3,7 +3,7 @@ My journey learning zero knowledge proof technologies in public! Feedback, help 
 
 # Setup
 
-Run `yarn` to install all dependencies in the monorepo. Project-specific instructions are in their own repos
+Run `yarn` to install all dependencies in the monorepo. Project-specific instructions and scripts are in their own repos
 
 # Projects
 
@@ -14,3 +14,10 @@ Using ZoKrates, proof is generates for the  above linear express. It's tested wi
 ### 2) Another simple proof, but with simple integrations with NFTs and JS.
 
 Using ZoKrates again, this is a more advanced example in terms of integrating ZKPs with JavaScript. Goal is to replicate something like a game-experience but without delving deep into more advanced ZKPs. Code: [02-magic-number-and-nft](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/02-magic-number-and-nft)
+
+
+### 3) Builds on 2 but using Circom 0.5 and SnarkJS
+
+Has scripts to conduct a two-phase Powers of Tau Ceremony.
+
+Code: [03-simple-circom-example](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/03-simple-circom-example)
