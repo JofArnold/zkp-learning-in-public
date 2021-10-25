@@ -1,16 +1,12 @@
-template Multiplier(n) {
-    signal input a;
-    signal input b;
-    signal output c;
-
-    signal int[n];
-
-    int[0] <== a*a + b;
-    for (var i=1; i<n; i++) {
-    int[i] <== int[i-1]*int[i-1] + b;
-    }
-
-    c <== int[n-1];
+template AddsToFive() {
+    signal private input a;
+    signal private input b;
+    signal private input c;
+    signal private input d;
+    signal private input e;
+    signal output f;
+    a + b + c + d + e === 5;
+    f <== 1;
 }
 
-component main = Multiplier(1000);
+component main = AddsToFive();
