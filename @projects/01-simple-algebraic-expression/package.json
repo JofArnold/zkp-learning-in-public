@@ -31,6 +31,8 @@
     "@typescript-eslint/parser": "5.0.0"
   },
   "workspaces": {
-    "nohoist": ["@openzeppelin/**"]
+    "nohoist": [
+      "@openzeppelin/**"
+    ]
   }
 }

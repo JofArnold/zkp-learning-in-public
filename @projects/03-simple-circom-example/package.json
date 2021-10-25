@@ -1,0 +1,52 @@
+{
+  "name": "@projects/03-simple-circom-example",
+  "version": "1.0.0",
+  "description": "Learning zero knowledge proofs in public",
+  "author": "Jof Arnold",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "upgradedeps": "ncu -u --reject @types/node",
+    "contracts:test": "npx hardhat test tests/contracts.test.ts",
+    "lint:solidity": "prettier --write 'contracts/**/*.sol'",
+    "zk:circuits:test": "yarn mocha --max-old-space-size=4000 tests/circuits.test.ts",
+    "zk:phase1": "cd zk && sh ptau_phase_1.sh",
+    "zk:phase2": "cd zk && sh ptau_phase_2.sh",
+    "zk:compile": "yarn circom ./zk/circuit.circom --r1cs ./zk/circuit.r1cs --wasm ./zk/circuit.wasm --sym ./zk/circuit.sym",
+    "zk:simulate-contract-call": "yarn snarkjs zkey export soliditycalldata ./zk/public.json ./zk/proof.json",
+    "zk:export-r1cs-json": "yarn snarkjs r1cs export json ./zk/circuit.r1cs ./zk/circuit.r1cs.json && cat ./zk/circuit.r1cs.json"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "2.0.2",
+    "@nomiclabs/hardhat-waffle": "2.0.1",
+    "@openzeppelin/contracts": "3.4.2",
+    "big-integer": "1.6.50",
+    "snarkjs": "0.4.7",
+    "ethereum-waffle": "3.4.0",
+    "circomlib": "2.0.1",
+    "ethers": "5.4.7",
+    "hardhat": "2.6.6",
+    "circom": "0.5.46"
+  },
+  "devDependencies": {
+    "@types/chai": "4.2.22",
+    "chai": "4.3.4",
+    "@projects/eslint-config": "1.0.0",
+    "@projects/prettier-config": "1.0.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.26.1",
+    "@typescript-eslint/eslint-plugin": "5.0.0",
+    "prettier": "2.4.1",
+    "circom_tester": "0.0.7",
+    "typescript": "4.4.4",
+    "ffjavascript": "0.2.39",
+    "@typescript-eslint/parser": "5.0.0"
+  },
+  "workspaces": {
+    "nohoist": [
+      "@openzeppelin/**",
+      "circomlib",
+      "circom_tester"
+    ]
+  }
+}
