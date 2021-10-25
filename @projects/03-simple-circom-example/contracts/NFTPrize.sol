@@ -19,19 +19,11 @@ contract NFTPrize is ERC721("MagicCoin", "MAG"), Verifier {
 
   mapping(uint256 => bool) tokenUniqueness;
 
-  function validateAndMintTokenOld(Proof memory proof, uint[] memory inputs) public returns (uint256) {
-    require(verify(inputs, proof) == 0, "invalid_proof");
-    _tokenIds.increment();
-    uint256 newItemId = _tokenIds.current();
-    _mint(msg.sender, newItemId);
-    return newItemId;
-  }
-
   function validateAndMintToken(
     uint[2] memory a,
     uint[2][2] memory b,
     uint[2] memory c,
-    uint[3] memory input
+    uint[1] memory input
   ) public returns (uint256) {
     require(verifyProof(a, b, c, input) == true, "invalid_proof");
     _tokenIds.increment();
