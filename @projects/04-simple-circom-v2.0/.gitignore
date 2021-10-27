@@ -1,0 +1,9 @@
+# ZK build artefacts
+*.ptau
+*.zkey
+*.r1cs
+*.wasm
+*.sym
+*.wtns
+verification_key.json
+proof.json
