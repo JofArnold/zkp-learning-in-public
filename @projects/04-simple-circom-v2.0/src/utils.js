@@ -1,5 +1,9 @@
 const bigInt = require("big-integer");
 
+const { groth16 } = require("snarkjs");
+const fs = require("fs");
+const builder = require("../zk/circuit_js/witness_calculator");
+
 const p = bigInt(
   "21888242871839275222246405745257275088548364400416034343698204186575808495617"
 );
@@ -28,7 +32,45 @@ function modPBigInt(x) {
   return ret;
 }
 
+// From https://github.com/akinovak/circom2-example/blob/375895064dcbc2c7747dd1deeafc634869de79c7/src/index.ts
+
+const genWnts = async (input, wasmFilePath, witnessFileName) => {
+  const buffer = fs.readFileSync(wasmFilePath);
+
+  return new Promise((resolve, reject) => {
+    builder(buffer)
+      .then(async (witnessCalculator) => {
+        const buff = await witnessCalculator.calculateWTNSBin(input, 0);
+        fs.writeFileSync(witnessFileName, buff);
+        resolve(witnessFileName);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const genProof = async (grothInput, wasmFilePath, finalZkeyPath) => {
+  await genWnts(grothInput, wasmFilePath, "witness.wtns");
+  const { proof, publicSignals } = await groth16.prove(
+    finalZkeyPath,
+    "witness.wtns",
+    null
+  );
+  const exists = fs.existsSync("witness.wtns");
+  if (exists) fs.unlinkSync("witness.wtns");
+  return { proof, publicSignals };
+};
+
+const verifyProof = (vKey, fullProof) => {
+  const { proof, publicSignals } = fullProof;
+  return groth16.verify(vKey, publicSignals, proof);
+};
+
 module.exports = {
   buildContractCallArgs,
   modPBigInt,
+  genWnts,
+  genProof,
+  verifyProof,
 };

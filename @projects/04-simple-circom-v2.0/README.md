@@ -1,9 +1,10 @@
 # About
 
-Projects uses Circom 2.0, PLONKs, circomlib, snarkjs, ethers.
-
+Projects demos Circom 2.0, circomlib, snarkjs, ethers, hardhat, solidity (NFT)
 
 You will need to install Circom somehow and modify the scripts accordingly. Have the binary in ./bin/circom as I don't install circom globally.
+
+Unfortunately I've not been able to get this working with PLONKs due to the compiling step erroring with `circuit too big`
 
 ## Commands
 

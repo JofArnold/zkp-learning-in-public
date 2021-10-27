@@ -1,9 +1,8 @@
-const { buildContractCallArgs } = require("../src/utils");
+const { buildContractCallArgs, genProof } = require("../src/utils");
 
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const path = require("path");
-const snarkjs = require("snarkjs");
 
 describe("NFT tests", () => {
   it("should mint and return NFT id and assign NFT when given correct proof", async () => {
@@ -13,11 +12,12 @@ describe("NFT tests", () => {
     await nft.deployed();
 
     // Generate proof
-    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-      { a: 1, b: 1, c: 1, d: 1, e: 1 },
-      path.resolve(__dirname, "../zk/circuit.wasm"),
+    const { proof, publicSignals } = await genProof(
+      { a: 1, b: 4 },
+      path.resolve(__dirname, "../zk/circuit_js/circuit.wasm"),
       path.resolve(__dirname, "../zk/circuit_final.zkey")
     );
+    console.log(proof, publicSignals);
     const callArgs = buildContractCallArgs(proof, publicSignals);
     const transaction = await nft
       .connect(signer1)
