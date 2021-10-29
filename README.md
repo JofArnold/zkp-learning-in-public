@@ -21,3 +21,7 @@ Using ZoKrates again, this is a more advanced example in terms of integrating ZK
 Has scripts to conduct a two-phase Powers of Tau Ceremony.
 
 Code: [03-simple-circom-example](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/03-simple-circom-example)
+
+### 4) Builds on 3 but using Circom 2.0
+
+Code: [04-simple-circom-v2.0](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/04-simple-circom-v2.0)
