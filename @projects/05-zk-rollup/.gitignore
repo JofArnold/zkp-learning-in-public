@@ -7,4 +7,4 @@
 *.wtns
 verification_key.json
 proof.json
-zk/circom
+zk/ptau
