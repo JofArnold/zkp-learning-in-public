@@ -42,62 +42,60 @@ if [ "$mode" == "ptau" ] && [ ! -d "${PTAU_DIR}" ]; then
 fi
 
 # Ptau artefacts
-ptau0_file="${PTAU_DIR}/pot12_0000.ptau"
-ptau1_file="${PTAU_DIR}/pot12_0001.ptau"
-ptau2_file="${PTAU_DIR}/pot12_0002.ptau"
-ptau3_file="${PTAU_DIR}/pot12_0003.ptau"
-ptau_beacon="${PTAU_DIR}/pot12_beacon.ptau"
-ptau_final_file="${PTAU_DIR}/pot12_final.ptau"
+PTAU_FILE_0="${PTAU_DIR}/pot12_0000.ptau"
+PTAU_FILE_1="${PTAU_DIR}/pot12_0001.ptau"
+PTAU_FILE_2="${PTAU_DIR}/pot12_0002.ptau"
+PTAU_FILE_3="${PTAU_DIR}/pot12_0003.ptau"
+PTAU_BEACON_FILE="${PTAU_DIR}/pot12_beacon.ptau"
+PTAU_FINAL_FILE="${PTAU_DIR}/pot12_final.ptau"
 
-input_file="${CIRCUIT_DIR}/input.json"
+INPUT_FILE="${CIRCUIT_DIR}/input.json"
 # Phase 2 artefacts
-r1cs_file="${CIRCUIT_DIR}/circuit.r1cs"
+R1CS_FILE="${CIRCUIT_DIR}/circuit.r1cs"
 wtns_file="${CIRCUIT_DIR}/witness.wtns"
-verification_key_file="${CIRCUIT_DIR}/verification_key.json"
-proof_file="${CIRCUIT_DIR}/proof.json"
-public_file="${CIRCUIT_DIR}/public.json"
+VERIFICATION_KEY_FILE="${CIRCUIT_DIR}/verification_key.json"
+PROOF_FILE="${CIRCUIT_DIR}/proof.json"
+PUBLIC_FILE="${CIRCUIT_DIR}/public.json"
 
-key0_file="${CIRCUIT_DIR}/circuit_0000.key"
-key1_file="${CIRCUIT_DIR}/circuit_0001.key"
-key2_file="${CIRCUIT_DIR}/circuit_0002.key"
-key3_file="${CIRCUIT_DIR}/circuit_0003.key"
-key_final_file="${CIRCUIT_DIR}/circuit_final.key"
-
+KEY_FILE_0="${CIRCUIT_DIR}/circuit_0000.key"
+KEY_FILE_1="${CIRCUIT_DIR}/circuit_0001.key"
+KEY_FILE_2="${CIRCUIT_DIR}/circuit_0002.key"
+KEY_FILE_3="${CIRCUIT_DIR}/circuit_0003.key"
+KEY_FINAL_FILE="${CIRCUIT_DIR}/circuit_final.key"
 
 # JS artefacts
-wasm_file="${CIRCUIT_DIR}/circuit_js/circuit.wasm"
-
+WASM_FILE="${CIRCUIT_DIR}/circuit_js/circuit.wasm"
 
 # --------------------------------------------------------------------------------
 # Phase 1
 # ... non-circuit-specific stuff
 if [ "$mode" == "ptau" ]; then
   echo "Running powers of tau ceremony for circuit"
-  # Starts Powers Of Tau ceremony, creating the file "${ptau0_file}"
-  yarn snarkjs powersoftau new bn128 12 "${ptau0_file}" -v
+  # Starts Powers Of Tau ceremony, creating the file "${PTAU_FILE_0}"
+  yarn snarkjs powersoftau new bn128 12 "${PTAU_FILE_0}" -v
 
 
 
   # Contribute to ceremony a few times...
   # As we want this to be non-interactive we'll just write something random-ish for entropy
-  yarn snarkjs powersoftau contribute "${ptau0_file}" "${ptau1_file}" --name="First contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
-  yarn snarkjs powersoftau contribute "${ptau1_file}" "${ptau2_file}" --name="Second contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
-  yarn snarkjs powersoftau contribute "${ptau2_file}" "${ptau3_file}" --name="Third contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs powersoftau contribute "${PTAU_FILE_0}" "${PTAU_FILE_1}" --name="First contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs powersoftau contribute "${PTAU_FILE_1}" "${PTAU_FILE_2}" --name="Second contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs powersoftau contribute "${PTAU_FILE_2}" "${PTAU_FILE_3}" --name="Third contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
 
   # Verify
-  yarn snarkjs powersoftau verify "${ptau3_file}"
+  yarn snarkjs powersoftau verify "${PTAU_FILE_3}"
 
   # Apply random beacon to finalised this phase of the setup.
-  yarn snarkjs powersoftau beacon "${ptau3_file}" "${ptau_beacon}" 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon"
+  yarn snarkjs powersoftau beacon "${PTAU_FILE_3}" "${PTAU_BEACON_FILE}" 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon"
 
   # Prepare phase 2...
   # Under the hood, the prepare phase2 command calculates the encrypted evaluation of the Lagrange polynomials at tau for
   # tau, alpha*tau and beta*tau. It takes the beacon ptau file we generated in the previous step, and outputs a final pta
   # file which will be used to generate the circuit proving and verification keys.
-  yarn snarkjs powersoftau prepare phase2 "${ptau_beacon}" "${ptau_final_file}" -v
+  yarn snarkjs powersoftau prepare phase2 "${PTAU_BEACON_FILE}" "${PTAU_FINAL_FILE}" -v
 
-  # Verify the final ptau file. Creates the file "${ptau_final_file}"
-  yarn snarkjs powersoftau verify "${ptau_final_file}"
+  # Verify the final ptau file. Creates the file "${PTAU_FINAL_FILE}"
+  yarn snarkjs powersoftau verify "${PTAU_FINAL_FILE}"
   exit 0
 fi
 
@@ -126,39 +124,39 @@ if [ "$mode" == "compile" ]; then
   # yarn zk:export-r1cs
 
   # Generate witness
-  node "${CIRCUIT_DIR}/circuit_js/generate_witness.js" "${wasm_file}" "${input_file}" "${wtns_file}"
+  node "${CIRCUIT_DIR}/circuit_js/generate_witness.js" "${WASM_FILE}" "${INPUT_FILE}" "${wtns_file}"
 
 
   # Setup (use plonk so we can skip ptau phase 2
-  yarn snarkjs groth16 setup "${r1cs_file}" "${ptau_final_file}" "${key_final_file}"
+  yarn snarkjs groth16 setup "${R1CS_FILE}" "${PTAU_FINAL_FILE}" "${KEY_FINAL_FILE}"
 
   # Generate reference zkey
-  yarn snarkjs zkey new "${r1cs_file}" "${ptau_final_file}" "${key0_file}"
+  yarn snarkjs zkey new "${R1CS_FILE}" "${PTAU_FINAL_FILE}" "${KEY_FILE_0}"
 
   # Ceremony just like before but for zkey this time
-  yarn snarkjs zkey contribute "${key0_file}" "${key1_file}" --name="First contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
-  yarn snarkjs zkey contribute "${key1_file}" "${key2_file}" --name="Second contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
-  yarn snarkjs zkey contribute "${key2_file}" "${key3_file}" --name="Third contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs zkey contribute "${KEY_FILE_0}" "${KEY_FILE_1}" --name="First contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs zkey contribute "${KEY_FILE_1}" "${KEY_FILE_2}" --name="Second contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs zkey contribute "${KEY_FILE_2}" "${KEY_FILE_3}" --name="Third contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
 
   #  Verify zkey
-   yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${key3_file}"
+   yarn snarkjs zkey verify "${R1CS_FILE}" "${PTAU_FINAL_FILE}" "${KEY_FILE_3}"
 
   # Apply random beacon as before
-  yarn snarkjs zkey beacon "${key3_file}" "${key_final_file}" 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon phase2"
+  yarn snarkjs zkey beacon "${KEY_FILE_3}" "${KEY_FINAL_FILE}" 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon phase2"
 
   # Optional: verify final zkey
-  yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${key_final_file}"
+  yarn snarkjs zkey verify "${R1CS_FILE}" "${PTAU_FINAL_FILE}" "${KEY_FINAL_FILE}"
 
   # Export verification key
-  yarn snarkjs zkey export verificationkey "${key_final_file}" "${verification_key_file}"
+  yarn snarkjs zkey export verificationkey "${KEY_FINAL_FILE}" "${VERIFICATION_KEY_FILE}"
 
   # Create the proof
-  yarn snarkjs groth16 prove "${key_final_file}" "${wtns_file}" "${proof_file}" "${public_file}"
+  yarn snarkjs groth16 prove "${KEY_FINAL_FILE}" "${wtns_file}" "${PROOF_FILE}" "${PUBLIC_FILE}"
 
   # Verify the proof
-  yarn snarkjs groth16 verify "${verification_key_file}" "${public_file}" "${proof_file}"
+  yarn snarkjs groth16 verify "${VERIFICATION_KEY_FILE}" "${PUBLIC_FILE}" "${PROOF_FILE}"
 
   # Export the verifier as a smart contract
-  yarn snarkjs zkey export solidityverifier "${key_final_file}" "${CONTRACT_DIR}/verifier.sol"
+  yarn snarkjs zkey export solidityverifier "${KEY_FINAL_FILE}" "${CONTRACT_DIR}/verifier.sol"
 
 fi
