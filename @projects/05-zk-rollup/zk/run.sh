@@ -46,7 +46,7 @@ ptau0_file="${PTAU_DIR}/pot12_0000.ptau"
 ptau1_file="${PTAU_DIR}/pot12_0001.ptau"
 ptau2_file="${PTAU_DIR}/pot12_0002.ptau"
 ptau3_file="${PTAU_DIR}/pot12_0003.ptau"
-ptau_beacon="${PTAU_DIR}/pot12_final.ptau"
+ptau_beacon="${PTAU_DIR}/pot12_beacon.ptau"
 ptau_final_file="${PTAU_DIR}/pot12_final.ptau"
 
 input_file="${CIRCUIT_DIR}/input.json"
@@ -56,6 +56,13 @@ wtns_file="${CIRCUIT_DIR}/witness.wtns"
 verification_key_file="${CIRCUIT_DIR}/verification_key.json"
 proof_file="${CIRCUIT_DIR}/proof.json"
 public_file="${CIRCUIT_DIR}/public.json"
+
+key0_file="${CIRCUIT_DIR}/circuit_0000.key"
+key1_file="${CIRCUIT_DIR}/circuit_0001.key"
+key2_file="${CIRCUIT_DIR}/circuit_0002.key"
+key3_file="${CIRCUIT_DIR}/circuit_0003.key"
+key_final_file="${CIRCUIT_DIR}/circuit_final.key"
+
 
 # JS artefacts
 wasm_file="${CIRCUIT_DIR}/circuit_js/circuit.wasm"
@@ -123,35 +130,35 @@ if [ "$mode" == "compile" ]; then
 
 
   # Setup (use plonk so we can skip ptau phase 2
-  yarn snarkjs groth16 setup "${r1cs_file}" "${ptau_final_file}" "${ptau_final_file}"
+  yarn snarkjs groth16 setup "${r1cs_file}" "${ptau_final_file}" "${key_final_file}"
 
   # Generate reference zkey
-  yarn snarkjs zkey new "${r1cs_file}" "${ptau_final_file}" "${ptau0_file}"
+  yarn snarkjs zkey new "${r1cs_file}" "${ptau_final_file}" "${key0_file}"
 
   # Ceremony just like before but for zkey this time
-  yarn snarkjs zkey contribute "${ptau0_file}" "${ptau1_file}" --name="First contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
-  yarn snarkjs zkey contribute "${ptau1_file}" "${ptau2_file}" --name="Second contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
-  yarn snarkjs zkey contribute "${ptau2_file}" "${ptau3_file}" --name="Third contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs zkey contribute "${key0_file}" "${key1_file}" --name="First contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs zkey contribute "${key1_file}" "${key2_file}" --name="Second contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
+  yarn snarkjs zkey contribute "${key2_file}" "${key3_file}" --name="Third contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
 
   #  Verify zkey
-   yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${ptau3_file}"
+   yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${key3_file}"
 
   # Apply random beacon as before
-  yarn snarkjs zkey beacon "${ptau3_file}" "${ptau_final_file}" 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon phase2"
+  yarn snarkjs zkey beacon "${key3_file}" "${key_final_file}" 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon phase2"
 
   # Optional: verify final zkey
-  yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${ptau_final_file}"
+  yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${key_final_file}"
 
   # Export verification key
-  yarn snarkjs zkey export verificationkey "${ptau_final_file}" "${verification_key_file}"
+  yarn snarkjs zkey export verificationkey "${key_final_file}" "${verification_key_file}"
 
   # Create the proof
-  yarn snarkjs groth16 prove "${ptau_final_file}" "${wasm_file}" "${proof_file}" "${public_file}"
+  yarn snarkjs groth16 prove "${key_final_file}" "${wtns_file}" "${proof_file}" "${public_file}"
 
   # Verify the proof
   yarn snarkjs groth16 verify "${verification_key_file}" "${public_file}" "${proof_file}"
 
   # Export the verifier as a smart contract
-  yarn snarkjs zkey export solidityverifier "${ptau_final_file}" "${CONTRACT_DIR}"
+  yarn snarkjs zkey export solidityverifier "${key_final_file}" "${CONTRACT_DIR}/verifier.sol"
 
 fi

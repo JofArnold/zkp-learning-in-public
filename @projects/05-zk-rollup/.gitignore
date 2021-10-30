@@ -8,3 +8,7 @@
 verification_key.json
 proof.json
 zk/ptau
+zk/**/circuit_*.key
+zk/**/circuit_js
+zk/**/public.json
+zk/**/circom
