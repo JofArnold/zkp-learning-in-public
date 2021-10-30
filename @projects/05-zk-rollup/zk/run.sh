@@ -17,8 +17,9 @@ while getopts "c:m:" opt; do
   esac
 done
 
-CIRCUIT_DIR=".zk/${circuitName}"
-PTAU_DIR=./zk/ptau
+CIRCUIT_DIR="./zk/${circuitName}"
+PTAU_DIR="./zk/ptau"
+CONTRACT_DIR="./contracts/${circuitName}"
 
 if [ "$mode" != "compile" ] && [ "$mode" != "ptau" ]; then
   echo "❌ 'Mode' must be 'circuit' or 'ptau'"
@@ -31,8 +32,8 @@ if [ "$mode" == "compile" ] && [ ! "${circuitName}" ]; then
 fi
 
 if [ "$mode" == "compile" ] && [ ! -d "${CIRCUIT_DIR}" ]; then
-  echo "⚠️ Circuit directory '${CIRCUIT_DIR}' does not exist. Creating directory."
-  mkdir "${CIRCUIT_DIR}"
+  echo "❌ Circuit directory '${CIRCUIT_DIR}' does not exist."
+  exit 1;
 fi
 
 if [ "$mode" == "ptau" ] && [ ! -d "${PTAU_DIR}" ]; then
@@ -40,18 +41,25 @@ if [ "$mode" == "ptau" ] && [ ! -d "${PTAU_DIR}" ]; then
   mkdir "${PTAU_DIR}"
 fi
 
+# Ptau artefacts
 ptau0_file="${PTAU_DIR}/pot12_0000.ptau"
 ptau1_file="${PTAU_DIR}/pot12_0001.ptau"
 ptau2_file="${PTAU_DIR}/pot12_0002.ptau"
 ptau3_file="${PTAU_DIR}/pot12_0003.ptau"
 ptau_beacon="${PTAU_DIR}/pot12_final.ptau"
 ptau_final_file="${PTAU_DIR}/pot12_final.ptau"
-wasm_file="${CIRCUIT_DIR}/${circuitName}_js/circuit.wasm"
-input_file="${CIRCUIT_DIR}/${circuitName}/input.json"
-wtns_file="${CIRCUIT_DIR}/${circuitName}/witness.wtns"
-verification_key_file="${CIRCUIT_DIR}/${circuitName}/verification_key.json"
-proof_file="${CIRCUIT_DIR}/${circuitName}/proof.json"
-public_file="${CIRCUIT_DIR}/${circuitName}/public.json"
+
+input_file="${CIRCUIT_DIR}/input.json"
+# Phase 2 artefacts
+r1cs_file="${CIRCUIT_DIR}/circuit.r1cs"
+wtns_file="${CIRCUIT_DIR}/witness.wtns"
+verification_key_file="${CIRCUIT_DIR}/verification_key.json"
+proof_file="${CIRCUIT_DIR}/proof.json"
+public_file="${CIRCUIT_DIR}/public.json"
+
+# JS artefacts
+wasm_file="${CIRCUIT_DIR}/circuit_js/circuit.wasm"
+
 
 # --------------------------------------------------------------------------------
 # Phase 1
@@ -97,7 +105,7 @@ if [ "$mode" == "compile" ]; then
   # - circuit.r1cs: the r1cs constraint system of the circuit in binary format
   # - "${circuitName}_js folder: wasm_file and witness tools
   # - circuit.sym: a symbols file required for debugging and printing the constraint system in an annotated mode
-  (cd && "${PTAU_DIR}/${circuitName}"./circom circuit.circom --r1cs --wasm_file  --sym)
+  (cd "${CIRCUIT_DIR}" && ./circom --r1cs --wasm  --sym)
 
   # Optional - view circuit state info
   # yarn snarkjs r1cs info circuit.r1cs
@@ -111,14 +119,14 @@ if [ "$mode" == "compile" ]; then
   # yarn zk:export-r1cs
 
   # Generate witness
-  node "${CIRCUIT_DIR}/${circuitName}_js/generate_witness.js" "${wasm_file}" "${input_file}" "${wtns_file}"
+  node "${CIRCUIT_DIR}/circuit_js/generate_witness.js" "${wasm_file}" "${input_file}" "${wtns_file}"
 
 
   # Setup (use plonk so we can skip ptau phase 2
-  yarn snarkjs groth16 setup circuit.r1cs "${ptau_final_file}" "${ptau_final_file}"
+  yarn snarkjs groth16 setup "${r1cs_file}" "${ptau_final_file}" "${ptau_final_file}"
 
   # Generate reference zkey
-  yarn snarkjs zkey new circuit.r1cs "${ptau_final_file}" "${ptau0_file}"
+  yarn snarkjs zkey new "${r1cs_file}" "${ptau_final_file}" "${ptau0_file}"
 
   # Ceremony just like before but for zkey this time
   yarn snarkjs zkey contribute "${ptau0_file}" "${ptau1_file}" --name="First contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
@@ -126,13 +134,13 @@ if [ "$mode" == "compile" ]; then
   yarn snarkjs zkey contribute "${ptau2_file}" "${ptau3_file}" --name="Third contribution" -v -e="$(head -n 4096 /dev/urandom | openssl sha1)"
 
   #  Verify zkey
-   yarn snarkjs zkey verify circuit.r1cs "${ptau_final_file}" "${ptau3_file}"
+   yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${ptau3_file}"
 
   # Apply random beacon as before
   yarn snarkjs zkey beacon "${ptau3_file}" "${ptau_final_file}" 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon phase2"
 
   # Optional: verify final zkey
-  yarn snarkjs zkey verify "${CIRCUIT_DIR}/${circuitName}.r1cs" "${ptau_final_file}" "${ptau_final_file}"
+  yarn snarkjs zkey verify "${r1cs_file}" "${ptau_final_file}" "${ptau_final_file}"
 
   # Export verification key
   yarn snarkjs zkey export verificationkey "${ptau_final_file}" "${verification_key_file}"
@@ -144,6 +152,6 @@ if [ "$mode" == "compile" ]; then
   yarn snarkjs groth16 verify "${verification_key_file}" "${public_file}" "${proof_file}"
 
   # Export the verifier as a smart contract
-  yarn snarkjs zkey export solidityverifier "${ptau_final_file}" "../contracts/${circuitName}/verifier.sol"
+  yarn snarkjs zkey export solidityverifier "${ptau_final_file}" "${CONTRACT_DIR}"
 
 fi
