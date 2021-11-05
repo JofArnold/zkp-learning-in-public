@@ -1,5 +1,8 @@
 # zkp-learning-in-public
-My journey learning zero knowledge proof technologies in public! Feedback, help and contributions very much welcome
+
+My journey learning zero knowledge proof technologies in public!
+
+Please feel free to create new [Issues](https://github.com/JofArnold/zkp-learning-in-public/issues) to ask questions, suggest new projects to build, make corrections, raise bugs etc.
 
 # Setup
 
