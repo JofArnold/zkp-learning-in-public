@@ -7,8 +7,7 @@
 *.wtns
 verification_key.json
 proof.json
-zk/ptau
-zk/**/circuit_*.key
-zk/**/circuit_js
-zk/**/public.json
-zk/**/circom
+circuits/**/circuit_*.key
+circuits/**/circuit_js
+circuits/**/public.json
+circuits/**/circom
