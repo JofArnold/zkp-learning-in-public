@@ -8,7 +8,8 @@
   "scripts": {
     "upgradedeps": "ncu -u --reject @types/node",
     "contracts:test": "npx hardhat test tests/contracts.test.ts",
-    "circuit:compile:equals_five": "node scripts/compile.js equals_five"
+    "circuit:compile:equals_five": "node scripts/compile.js equals_five",
+    "circuit:test": "yarn jest tests/circuits.test.ts"
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "2.0.2",
@@ -27,8 +28,10 @@
     "@types/jest": "27.0.2",
     "@typescript-eslint/eslint-plugin": "5.0.0",
     "@typescript-eslint/parser": "5.0.0",
+    "circom_tester": "0.0.7",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.26.1",
+    "ffjavascript": "0.2.39",
     "jest": "27.3.1",
     "prettier": "2.4.1",
     "ts-jest": "27.0.7",
@@ -37,7 +40,7 @@
   "workspaces": {
     "nohoist": [
       "@openzeppelin/**",
-      "circomlib",
+      "circom*",
       "@projects/utils"
     ]
   }
