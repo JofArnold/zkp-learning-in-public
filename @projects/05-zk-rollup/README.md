@@ -1,17 +1,41 @@
 # About
 
-Projects demos Circom 2.0, circomlib, snarkjs, ethers, hardhat, solidity (NFT)
-
-You will need to install Circom somehow and modify the scripts accordingly. Have the binary in ./bin/circom as I don't install circom globally.
-
-Unfortunately I've not been able to get this working with PLONKs due to the compiling step erroring with `circuit too big`
+ZK Rollup
 
 
-## Commands
+## Getting it running:
 
-- `yarn zk:ptau` - run the first part of the Powers of Tau ceremony. Only has to be ran once
-- `yarn zk:compile` - compiles the circuit and generates a solidity validator
-- `yarn contracts:test` - tests the contracts (subset of tests used in Project 02)
+In root:
+
+```bash
+yarn
+```
+
+In this dir:
+
+```bash
+# Run once
+yarn zk:ptau
+
+# Run for each circuit changed
+zk:compile:equals_five
+zk:compile:equals_five
+
+```
+
+# How it works
+
+This explanation has been taken from a variety of really great sources including BarryWhiteHat's original proposal:
+
+https://github.com/barryWhiteHat/roll_up_token
+
+https://github.com/opentimestamps/opentimestamps-server/blob/4f5a3c6ae56be766cc6d83e31fb5341f78ecad7c/doc/merkle-mountain-range.md
+
+https://medium.com/fcats-blockchain-incubator/how-zk-rollups-work-8ac4d7155b0e
+
+https://github.com/rollupnc/RollupNC/blob/remoe_multiple_tokens_transfer_and_withdraw.cir/snark_circuit/multiple_tokens_transfer_and_withdraw.circom
+
+
 
 ## Quality/Feedback/Questions
 
