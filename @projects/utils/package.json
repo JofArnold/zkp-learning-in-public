@@ -1,0 +1,14 @@
+{
+  "name": "@projects/utils",
+  "version": "1.0.0",
+  "description": "Various useful scripts for handling ZKPs etc",
+  "author": "Jof Arnold",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "snarkjs": "0.4.10",
+    "commander": "8.3.0"
+  },
+  "devDependencies": {
+  }
+}
