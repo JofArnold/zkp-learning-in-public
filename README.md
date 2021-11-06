@@ -28,3 +28,11 @@ Code: [03-simple-circom-example](https://github.com/JofArnold/zkp-learning-in-pu
 ### 4) Builds on 3 but using Circom 2.0
 
 Code: [04-simple-circom-v2.0](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/04-simple-circom-v2.0)
+
+### 5) zk Rollup
+
+WIP
+
+### 6) Example Circom operators and their outputs
+
+Code: [06-circom-math](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/06-circom-math)
