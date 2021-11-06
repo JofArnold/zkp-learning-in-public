@@ -36,8 +36,7 @@
   },
   "workspaces": {
     "nohoist": [
-      "@openzeppelin/**",
-      "circomlib"
+      "**"
     ]
   }
 }

@@ -10,5 +10,11 @@
     "commander": "8.3.0"
   },
   "devDependencies": {
+  },
+  "workspaces": {
+    "nohoist": [
+      "circom",
+      "snarkjs"
+    ]
   }
 }
