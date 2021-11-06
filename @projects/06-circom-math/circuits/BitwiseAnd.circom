@@ -4,11 +4,11 @@ template BitwiseAnd() {
     signal input in1;
     signal input in2;
     signal output out;
-    signal foo;
-    signal bar;
-    foo <-- in1 & in2;
-    bar <-- foo * 1;
-    out <== bar;
+    signal tmp1;
+    signal tmp2;
+    tmp1 <-- in1 & in2;
+    tmp2 <-- tmp1 * 1;
+    out <== tmp2;
 }
 
 component main {public [in1, in2]} = BitwiseAnd();

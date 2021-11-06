@@ -5,11 +5,11 @@ template InverseModulo() {
     signal input in2;
     signal input in3;
     signal output out;
-    signal foo;
-    signal bar;
-    foo <-- in1 / in2;
-    bar <-- foo * in3;
-    out <== bar;
+    signal tmp1;
+    signal tmp2;
+    tmp1 <-- in1 / in2;
+    tmp2 <-- tmp1 * in3;
+    out <== tmp2;
 }
 
 component main {public [in1,in2, in3]} = InverseModulo();
