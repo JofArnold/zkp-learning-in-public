@@ -15,5 +15,13 @@
     "circomlibjs": "0.1.0",
     "ts-jest": "27.0.7",
     "jest": "27.3.1"
+  },
+  "workspaces": {
+    "nohoist": [
+      "circom_tester",
+      "circomlibjs",
+      "circom",
+      "snarkjs"
+    ]
   }
 }
