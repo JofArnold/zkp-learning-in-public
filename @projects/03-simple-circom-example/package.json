@@ -46,7 +46,9 @@
     "nohoist": [
       "@openzeppelin/**",
       "circomlib",
-      "circom_tester"
+      "circom_tester",
+      "circom",
+      "snarkjs"
     ]
   }
 }

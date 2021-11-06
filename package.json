@@ -28,5 +28,9 @@
     "typescript": "4.4.4"
   },
   "main": "index.js",
-  "repository": "https://github.com/JofArnold/zkp-learning-in-public.git"
+  "repository": "https://github.com/JofArnold/zkp-learning-in-public.git",
+  "nohoist": [
+    "circom",
+    "snarkjs"
+  ]
 }

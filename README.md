@@ -1,5 +1,8 @@
 # zkp-learning-in-public
-My journey learning zero knowledge proof technologies in public! Feedback, help and contributions very much welcome
+
+My journey learning zero knowledge proof technologies in public!
+
+Please feel free to create new [Issues](https://github.com/JofArnold/zkp-learning-in-public/issues) to ask questions, suggest new projects to build, make corrections, raise bugs etc.
 
 # Setup
 
@@ -25,3 +28,11 @@ Code: [03-simple-circom-example](https://github.com/JofArnold/zkp-learning-in-pu
 ### 4) Builds on 3 but using Circom 2.0
 
 Code: [04-simple-circom-v2.0](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/04-simple-circom-v2.0)
+
+### 5) zk Rollup
+
+WIP
+
+### 6) Example Circom operators and their outputs
+
+Code: [06-circom-math](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/06-circom-math)
