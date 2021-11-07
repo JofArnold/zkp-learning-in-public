@@ -46,6 +46,9 @@ describe("Utils tests", () => {
 
   test("convertBinaryStringToInt", () => {
     expect(convertBinaryStringToInt("10101110010101000100")).toBe(714052);
+    expect(convertBinaryStringToInt("010101110010101000100")).toBe(714052);
+    expect(convertBinaryStringToInt("0010101110010101000100")).toBe(714052);
+    expect(convertBinaryStringToInt("00010101110010101000100")).toBe(714052);
   });
 
   // test("convertIntTo16BitIntArray", () => {
