@@ -7,6 +7,15 @@ const Fr = new F1Field(exports.p);
 
 const wasmTester = require("circom_tester").wasm;
 
+const MAZE = [
+  // eslint-disable-next-line prettier/prettier
+  10, 14, 5, 6, 12,
+  6, 2, 4, 4, 5,
+  11, 13, 6, 5, 13,
+  6, 4, 8, 13, 11,
+  7, 14, 12, 7, 12,
+];
+
 describe("Circuit tests", () => {
   test("Basic array circuit works", async () => {
     const file = path.resolve(__dirname, "../circuits/Array.circom");
@@ -20,23 +29,25 @@ describe("Circuit tests", () => {
     });
   });
 
+  test("Maze array circuit works", async () => {
+    const file = path.resolve(__dirname, "../circuits/Maze.circom");
+    const circuit = await wasmTester(file);
+
+    const witness = await circuit.calculateWitness({}, true);
+    const outputs: number[] = witness.slice(1, 25);
+    outputs.forEach((output, i) => {
+      expect(Fr.eq(Fr.e(MAZE[i]), output)).toBe(true);
+    });
+  });
+
   test("PositionToMove circuit works", async () => {
     const file = path.resolve(__dirname, "../circuits/PositionToMove.circom");
     const circuit = await wasmTester(file);
 
-    const maze = [
-      // eslint-disable-next-line prettier/prettier
-      10, 14, 5, 6, 12,
-      6, 2, 4, 4, 5,
-      11, 13, 6, 5, 13,
-      6, 4, 8, 13, 11,
-      7, 14, 12, 7, 12,
-    ];
-
-    const promises = maze.map((_, i) => async () => {
+    const promises = MAZE.map((_, i) => async () => {
       const witness = await circuit.calculateWitness({ pos: i }, true);
       const output = witness[1];
-      expect(Fr.eq(Fr.e(maze[i]), output)).toBe(true);
+      expect(Fr.eq(Fr.e(MAZE[i]), output)).toBe(true);
     });
     await Promise.all(promises);
   });
