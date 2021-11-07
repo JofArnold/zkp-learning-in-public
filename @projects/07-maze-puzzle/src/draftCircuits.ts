@@ -5,6 +5,27 @@ export const circuit_convertIntTo16BitIntArray = (
   const out = [];
   for (let i = 0; i < totalMoves; i++) {
     let integer = 0;
+export const circuit_convertIntTo16BitIntArrayBytes = (
+  movesInt: number,
+  bytes: number
+): (number | undefined)[] => {
+  const out = [];
+  let remaining = movesInt;
+  let i = 0;
+  while (remaining > 0) {
+    let integer = 0;
+    for (let j = 0; j < 4; j++) {
+      const shift = i * 4 + j;
+      const bit = (movesInt >> shift) & 1;
+      const digit = bit * 2 ** j;
+      integer += digit;
+    }
+    out[i] = integer;
+    remaining = remaining >> 4;
+    i++;
+  }
+  return out;
+};
     for (let j = 0; j < 4; j++) {
       const bit = (movesInt >> (i * 4 + j)) & 1;
       const digit = bit * 2 ** j;
