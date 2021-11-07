@@ -3,24 +3,32 @@ import {
   convertMovesArrayToBinaryString,
 } from "../src/utils";
 import {
-  checkIfIntSequenceIsValid,
-  convertIntTo16BitIntArray,
-  reverseArray,
+  circuit_checkIfIntSequenceIsValid,
+  circuit_convertIntTo16BitIntArray,
+  circuit_reverseArray,
 } from "../src/draftCircuits";
 
 describe("Draft circuits test tests", () => {
-  test("reverseArray", () => {
+  test("circuit_reverseArray", () => {
     const arr = [10, 14, 5, 4, 4];
-    const reversed = reverseArray(arr);
+    const reversed = circuit_reverseArray(arr);
     const nativeReversed = arr.reverse();
     expect(reversed).toEqual(nativeReversed);
+  });
+
+  test("circuit_convertIntTo16BitIntArray", () => {
+    const moves = [10, 14, 5, 4, 4];
+    const bin = convertMovesArrayToBinaryString(moves);
+    const int = convertBinaryStringToInt(bin);
+    const arr = circuit_convertIntTo16BitIntArray(int, moves.length);
+    expect(arr).toEqual(moves);
   });
 
   test("convertMovesArrayToBinaryString", () => {
     const moves = [10, 14, 5, 4, 4];
     const bin = convertMovesArrayToBinaryString(moves);
     const int = convertBinaryStringToInt(bin);
-    const arr = convertIntTo16BitIntArray(int, moves.length);
+    const arr = circuit_convertIntTo16BitIntArray(int, moves.length);
     expect(arr).toEqual(moves);
   });
 
@@ -29,7 +37,7 @@ describe("Draft circuits test tests", () => {
       const moves = [10, 14, 5, 4, 4];
       const bin = convertMovesArrayToBinaryString(moves);
       const int = convertBinaryStringToInt(bin);
-      const audit = checkIfIntSequenceIsValid(int);
+      const audit = circuit_checkIfIntSequenceIsValid(int);
       expect(audit).toBe(true);
     }
 
@@ -37,7 +45,7 @@ describe("Draft circuits test tests", () => {
       const moves = [10, 14, 5, 14, 4];
       const bin = convertMovesArrayToBinaryString(moves);
       const int = convertBinaryStringToInt(bin);
-      const audit = checkIfIntSequenceIsValid(int);
+      const audit = circuit_checkIfIntSequenceIsValid(int);
       expect(audit).toBe(false);
     }
 
@@ -45,7 +53,7 @@ describe("Draft circuits test tests", () => {
       const moves = [10, 14, 5, 14, 10];
       const bin = convertMovesArrayToBinaryString(moves);
       const int = convertBinaryStringToInt(bin);
-      const audit = checkIfIntSequenceIsValid(int);
+      const audit = circuit_checkIfIntSequenceIsValid(int);
       expect(audit).toBe(true);
     }
   });

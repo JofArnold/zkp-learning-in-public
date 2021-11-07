@@ -1,4 +1,4 @@
-export const convertIntTo16BitIntArray = (
+export const circuit_convertIntTo16BitIntArray = (
   movesInt: number,
   totalMoves: number
 ): (number | undefined)[] => {
@@ -12,11 +12,11 @@ export const convertIntTo16BitIntArray = (
     }
     out[i] = integer;
   }
-  const reversed = reverseArray(out);
+  const reversed = circuit_reverseArray(out);
   return reversed;
 };
 
-export const reverseArray = (arr: number[]): (number | undefined)[] => {
+export const circuit_reverseArray = (arr: number[]): (number | undefined)[] => {
   const out = [];
   for (let i = arr.length - 1; i >= 0; i--) {
     out[arr.length - 1 - i] = arr[i];
@@ -31,9 +31,11 @@ const validMoves = [
   [4, 4],
 ];
 
-export const checkIfIntSequenceIsValid = (seq: number): boolean => {
+const maze = [[7, 14, 12, 7, 12]];
+
+export const circuit_checkIfIntSequenceIsValid = (seq: number): boolean => {
   const length = 5;
-  const moves = convertIntTo16BitIntArray(seq, 5);
+  const moves = circuit_convertIntTo16BitIntArray(seq, 5);
   const audit = [];
   for (let i = 0; i < length - 1; i++) {
     const curr = moves[i];
