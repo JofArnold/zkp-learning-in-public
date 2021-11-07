@@ -41,6 +41,43 @@ describe("Circuit tests", () => {
     await Promise.all(promises);
   });
 
+  test("IsTileDeltaAllowed circuit works", async () => {
+    const file = path.resolve(
+      __dirname,
+      "../circuits/IsTileDeltaAllowed.circom"
+    );
+    const circuit = await wasmTester(file);
+
+    {
+      const witness = await circuit.calculateWitness(
+        { fromType: 10, direction: 1 },
+        true
+      );
+      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
+    }
+    {
+      const witness = await circuit.calculateWitness(
+        { fromType: 10, direction: 3 },
+        true
+      );
+      expect(Fr.eq(Fr.e(0), witness[1])).toBe(true);
+    }
+    {
+      const witness = await circuit.calculateWitness(
+        { fromType: 6, direction: 3 },
+        true
+      );
+      expect(Fr.eq(Fr.e(0), witness[1])).toBe(true);
+    }
+    {
+      const witness = await circuit.calculateWitness(
+        { fromType: 7, direction: 2 },
+        true
+      );
+      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
+    }
+  });
+
   test("IsMoveAllowed circuit works", async () => {
     const file = path.resolve(__dirname, "../circuits/IsMoveAllowed.circom");
     const circuit = await wasmTester(file);
