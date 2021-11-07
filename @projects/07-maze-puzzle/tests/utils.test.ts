@@ -1,12 +1,47 @@
 import {
   convertBinaryStringToInt,
   convertMovesArrayToBinaryString,
+  convertMovesArrayToPaddedBinaryString,
+  convertMovesArrayToSignedPaddedBinaryString,
 } from "../src/utils";
 
 describe("Utils tests", () => {
   test("convertMovesArrayToBinaryString", () => {
     const moves = [10, 14, 5, 4, 4];
     expect(convertMovesArrayToBinaryString(moves)).toBe("10101110010101000100");
+  });
+
+  test("convertMovesArrayToPaddedBinaryString", () => {
+    const moves = [10, 14, 5, 4, 1];
+    expect(convertMovesArrayToPaddedBinaryString(moves, 10)).toBe(
+      "1010" +
+        "1110" +
+        "0101" +
+        "0100" +
+        "0001" +
+        "0000" +
+        "0000" +
+        "0000" +
+        "0000" +
+        "0000"
+    );
+  });
+
+  test("convertMovesArrayToPaddedBinaryString", () => {
+    const moves = [10, 14, 5, 4, 1, -1, -9];
+    expect(convertMovesArrayToSignedPaddedBinaryString(moves, 10)).toBe(
+      // eslint-disable-next-line prettier/prettier
+        "01010" +
+        "01110" +
+        "00101" +
+        "00100" +
+        "00001" +
+        "10001" +
+        "11001" +
+        "00000" +
+        "00000" +
+        "00000"
+    );
   });
 
   test("convertBinaryStringToInt", () => {
