@@ -40,4 +40,22 @@ describe("Circuit tests", () => {
     });
     await Promise.all(promises);
   });
+
+  test("IsMoveAllowed circuit works", async () => {
+    const file = path.resolve(__dirname, "../circuits/IsMoveAllowed.circom");
+    const circuit = await wasmTester(file);
+
+    {
+      const witness = await circuit.calculateWitness({ move: [10, 14] }, true);
+      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
+    }
+    {
+      const witness = await circuit.calculateWitness({ move: [14, 10] }, true);
+      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
+    }
+    {
+      const witness = await circuit.calculateWitness({ move: [1, 14] }, true);
+      expect(Fr.eq(Fr.e(1), witness[1])).toBe(false);
+    }
+  });
 });
