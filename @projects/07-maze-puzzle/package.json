@@ -1,0 +1,27 @@
+{
+  "name": "@projects/07-puzzle-maze",
+  "version": "1.0.0",
+  "description": "Learning zero knowledge proofs in public",
+  "author": "Jof Arnold",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@types/jest": "27.0.2",
+    "blake-hash": "2.0.0",
+    "circom_tester": "0.0.7",
+    "circomlibjs": "0.1.0",
+    "ts-jest": "27.0.7",
+    "jest": "27.3.1"
+  },
+  "workspaces": {
+    "nohoist": [
+      "circom_tester",
+      "circomlibjs",
+      "circom",
+      "snarkjs"
+    ]
+  }
+}
