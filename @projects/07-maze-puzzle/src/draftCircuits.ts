@@ -17,8 +17,12 @@ export const circuit_convertIntTo16BitIntArrayBytes = (
     for (let j = 0; j < bytes; j++) {
       const shift = i * bytes + j;
       const bit = (movesInt >> shift) & 1;
-      const digit = bit * 2 ** j;
-      integer += digit;
+      if (j === bytes - 1 && bit === 1) {
+        integer = integer * -1;
+      } else {
+        const digit = bit * 2 ** j;
+        integer += digit;
+      }
     }
     out[i] = integer;
     remaining = remaining >> bytes;
