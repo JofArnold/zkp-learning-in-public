@@ -143,4 +143,18 @@ describe("Circuit tests", () => {
       expect(Fr.eq(Fr.e(1), witness[1])).toBe(false);
     }
   });
+
+  test("Game circuit works", async () => {
+    const file = path.resolve(__dirname, "../circuits/Game.circom");
+    const circuit = await wasmTester(file);
+
+    {
+      const moves = Array(20).fill(-1); // Sparse array of moves
+      [1, 1, 0, 3, 0, 0, 1, 2, 1, 0, 0, 1].forEach((move, index) => {
+        moves[index] = move;
+      });
+      const witness = await circuit.calculateWitness({ moves }, true);
+      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
+    }
+  });
 });
