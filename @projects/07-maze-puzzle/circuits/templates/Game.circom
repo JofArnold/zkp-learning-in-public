@@ -54,7 +54,6 @@ template Game(N) {
     // Get current tile type
     currentIndex --> currentTCFI[m].index;
     currentTileCode = currentTCFI[m].tileCode;
-    log(currentIndex);
 
     // Check if exiting the tile in that direction is ok
     currentTileCode --> exits[m].tileCode;

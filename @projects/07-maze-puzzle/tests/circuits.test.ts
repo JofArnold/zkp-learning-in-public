@@ -157,21 +157,13 @@ describe("Circuit tests", () => {
     const COMPLETE = 2;
     // Invalid
     {
-      const moves = Array(20).fill(-1); // Sparse array of moves
-      [1, 0].forEach((move, index) => {
+      const moves = Array(12).fill(-1); // Sparse array of moves
+      // second move is invalid
+      [1, 7, 0, 3, 0, 0, 1, 2, 1, 0, 0, 1].forEach((move, index) => {
         moves[index] = move;
       });
       const witness = await circuit.calculateWitness({ moves }, true);
       expect(Fr.eq(Fr.e(INVALID), witness[1])).toBe(true);
-    }
-    // Valid but incomplete
-    {
-      const moves = Array(20).fill(-1); // Sparse array of moves
-      [1, 1, 0, 3].forEach((move, index) => {
-        moves[index] = move;
-      });
-      const witness = await circuit.calculateWitness({ moves }, true);
-      expect(Fr.eq(Fr.e(VALID), witness[1])).toBe(true);
     }
     // Valid and complete
     {
