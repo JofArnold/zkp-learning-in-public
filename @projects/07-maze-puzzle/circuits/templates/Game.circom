@@ -2,14 +2,25 @@ pragma circom 2.0.0;
 
 include "./GetNextIndexForMove.circom";
 include "./TileCodeFromIndex.circom";
-include "./IsTileOpenForDirection.circom";
+include "./IsTileOpenForSide.circom";
+
+function invertDirection(direction) {
+    if (direction == 0) {
+        return 2;
+    } else if (direction == 1) {
+        return 3;
+    } else if (direction == 2) {
+        return 0;
+    } else {
+      return 1;
+    }
+}
 
 template Game(N) {
   signal input moves[N];
 
   // result
   signal output movesValid;
-  signal output movesCompleted;
 
   // Various utils
   component gnis[N];
@@ -23,8 +34,8 @@ template Game(N) {
     gnis[i] = GetNextIndexForMove();
     currentTCFI[i] = TileCodeFromIndex();
     nextTCFI[i] = TileCodeFromIndex();
-    exits[i] = IsTileOpenForDirection();
-    entrances[i] = IsTileOpenForDirection();
+    exits[i] = IsTileOpenForSide();
+    entrances[i] = IsTileOpenForSide();
   }
 
   var currentTileCode;
@@ -32,6 +43,7 @@ template Game(N) {
   var currentIndex = 0;
   var nextIndex;
   var currentDirection;
+  var nextDirection;
   var movesOk = 1;
   var moveOk;
   var movesEnded = 0;
@@ -42,10 +54,11 @@ template Game(N) {
     // Get current tile type
     currentIndex --> currentTCFI[m].index;
     currentTileCode = currentTCFI[m].tileCode;
+    log(currentIndex);
 
     // Check if exiting the tile in that direction is ok
     currentTileCode --> exits[m].tileCode;
-    currentDirection --> exits[m].direction;
+    currentDirection --> exits[m].side;
     moveOk = exits[m].success;
     movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
 
@@ -59,8 +72,9 @@ template Game(N) {
     nextTileCode = nextTCFI[m].tileCode;
 
     // Check if entering in that direction is ok
+    nextDirection = invertDirection(currentDirection);
     nextTileCode --> entrances[m].tileCode;
-    currentDirection --> entrances[m].direction;
+    nextDirection --> entrances[m].side;
     moveOk = exits[m].success;
     movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
 
@@ -68,5 +82,4 @@ template Game(N) {
   }
 
   movesValid <-- movesOk;
-  movesCompleted <-- currentIndex;
 }
