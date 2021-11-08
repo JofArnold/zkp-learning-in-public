@@ -33,9 +33,12 @@ export const convertMovesArrayToSignedPaddedBinaryString = (
     .join("");
 };
 
-export const convertBinaryStringToInt = (binaryString: string) => {
+export const convertBinaryStringToInt = (
+  binaryString: string,
+  bytes: number
+) => {
   const length = binaryString.length;
-  const missing = 4 - (length % 4);
+  const missing = bytes - (length % bytes);
   const shouldBe = missing + length;
   const corrected = binaryString.padStart(shouldBe, "0");
   return parseInt(corrected, 2);
