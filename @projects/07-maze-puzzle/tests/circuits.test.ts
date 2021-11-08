@@ -52,6 +52,43 @@ describe("Circuit tests", () => {
     await Promise.all(promises);
   });
 
+  test("GetNextIndexForMove circuit works", async () => {
+    const file = path.resolve(
+      __dirname,
+      "../circuits/GetNextIndexForMove.circom"
+    );
+    const circuit = await wasmTester(file);
+
+    const MOVES = [
+      {
+        input: [0, 3],
+        expected: 1,
+      },
+      {
+        input: [1, 3],
+        expected: 2,
+      },
+      {
+        input: [1, 0],
+        expected: 7,
+      },
+      {
+        input: [0, 0],
+        expected: 6,
+      },
+    ];
+
+    const promises = MOVES.map((test) => async () => {
+      const witness = await circuit.calculateWitness(
+        { from: test.input[0], direction: test.input[1] },
+        true
+      );
+      const output = witness[1];
+      expect(Fr.eq(Fr.e(test.expected), output)).toBe(true);
+    });
+    await Promise.all(promises);
+  });
+
   test("IsTileOpenForDirection circuit works", async () => {
     const file = path.resolve(
       __dirname,
