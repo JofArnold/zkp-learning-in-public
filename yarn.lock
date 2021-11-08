@@ -3671,6 +3671,11 @@ circomlib@2.0.1:
   resolved "https://registry.yarnpkg.com/circomlib/-/circomlib-2.0.1.tgz#cdc475a0a988468611e8e5ab1c98af451890157b"
   integrity sha512-YVHukTcOrm+BtIrb1h58qDzIpyx7FurTt82sxC2VJmz2GGuXmvMiKUNHfCajGo7ZPpQqzRCh97ALZ0X72FJZCA==
 
+circomlib@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/circomlib/-/circomlib-2.0.2.tgz#98ebb2b98f50953623e6251d8e338ad33ec4a0d2"
+  integrity sha512-hg6HnKAqAhx1NZc5kXuDOOgyOZYa6TQIKbITnuY7dgvBtIFPWh5aNRJhNUBrxrx+wHX3sZvhu0igmFKfaXoLsQ==
+
 circomlib@^0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/circomlib/-/circomlib-0.2.4.tgz#5c487e69738c90bd73527d8830d2b2413d6f68ff"
