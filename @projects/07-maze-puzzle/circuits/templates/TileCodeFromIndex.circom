@@ -2,10 +2,10 @@ pragma circom 2.0.0;
 
 include "./Maze.circom";
 
-template TileTypeFromIndex() {
+template TileCodeFromIndex() {
   signal input index;
-  signal output out;
+  signal output tileCode;
   component m = Maze();
   var maze[25] = m.out;
-  out <-- maze[index];
+  tileCode <-- maze[index];
 }

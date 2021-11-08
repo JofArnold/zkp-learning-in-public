@@ -40,10 +40,10 @@ describe("Circuit tests", () => {
     });
   });
 
-  test("TileTypeFromIndex circuit works", async () => {
+  test("TileCodeFromIndex circuit works", async () => {
     const file = path.resolve(
       __dirname,
-      "../circuits/TileTypeFromIndex.circom"
+      "../circuits/TileCodeFromIndex.circom"
     );
     const circuit = await wasmTester(file);
 
@@ -151,13 +151,35 @@ describe("Circuit tests", () => {
     const file = path.resolve(__dirname, "../circuits/Game.circom");
     const circuit = await wasmTester(file);
 
+    const INVALID = 0;
+    const VALID = 1;
+    const COMPLETE = 2;
+    // Invalid
+    {
+      const moves = Array(20).fill(-1); // Sparse array of moves
+      [1, 0].forEach((move, index) => {
+        moves[index] = move;
+      });
+      const witness = await circuit.calculateWitness({ moves }, true);
+      expect(Fr.eq(Fr.e(INVALID), witness[1])).toBe(true);
+    }
+    // Valid but incomplete
+    {
+      const moves = Array(20).fill(-1); // Sparse array of moves
+      [1, 1, 0, 3].forEach((move, index) => {
+        moves[index] = move;
+      });
+      const witness = await circuit.calculateWitness({ moves }, true);
+      expect(Fr.eq(Fr.e(VALID), witness[1])).toBe(true);
+    }
+    // Valid and complete
     {
       const moves = Array(20).fill(-1); // Sparse array of moves
       [1, 1, 0, 3, 0, 0, 1, 2, 1, 0, 0, 1].forEach((move, index) => {
         moves[index] = move;
       });
       const witness = await circuit.calculateWitness({ moves }, true);
-      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
+      expect(Fr.eq(Fr.e(COMPLETE), witness[1])).toBe(true);
     }
   });
 });

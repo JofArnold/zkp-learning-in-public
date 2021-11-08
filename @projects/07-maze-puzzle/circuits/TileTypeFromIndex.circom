@@ -1,5 +1,5 @@
 pragma circom 2.0.0;
 
-include "./templates/TileTypeFromIndex.circom";
+include "./templates/TileCodeFromIndex.circom";
 
-component main {public [index]} = TileTypeFromIndex();
+component main {public [index]} = TileCodeFromIndex();
