@@ -3,9 +3,24 @@ export const circuit_convertIntTo16BitIntArray = (
   totalMoves: number
 ): (number | undefined)[] => {
   const out = [];
+  let str = "";
   for (let i = 0; i < totalMoves; i++) {
     let integer = 0;
-export const circuit_convertIntTo16BitIntArrayBytes = (
+    for (let j = 0; j < 4; j++) {
+      const shift = i * 4 + j;
+      const bit = (movesInt >> shift) & 1;
+      console.log(bit);
+      str += bit;
+      const digit = bit * 2 ** j;
+      integer += digit;
+    }
+    out[i] = integer;
+  }
+  console.log(str);
+  return out;
+};
+
+export const circuit_convertIntTo16BitSignedIntArray = (
   movesInt: number,
   bytes: number
 ): (number | undefined)[] => {
@@ -30,6 +45,7 @@ export const circuit_convertIntTo16BitIntArrayBytes = (
   }
   return out;
 };
+
     for (let j = 0; j < 4; j++) {
       const bit = (movesInt >> (i * 4 + j)) & 1;
       const digit = bit * 2 ** j;
