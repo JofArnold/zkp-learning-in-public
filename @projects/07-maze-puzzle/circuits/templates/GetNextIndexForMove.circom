@@ -13,7 +13,7 @@ template GetNextIndexForMove() {
   // 3 - west
   signal input direction;
 
-  signal output out;
+  signal output nextIndex;
 
   var delta = 0;
   if (direction == 0) {
@@ -25,5 +25,5 @@ template GetNextIndexForMove() {
   } else if (direction == 3) {
     delta = -1;
   }
-  out <-- from + delta;
+  nextIndex <-- from + delta;
 }
