@@ -1,14 +1,14 @@
 pragma circom 2.0.0;
 
-template IsTileDeltaAllowed() {
-  // fromType: [0..24]
-  signal input fromType;
+template IsTileOpenForDirection() {
+  // tileCode: [1..16]
+  signal input tileCode;
 
   // direction
-  // 0 - up
-  // 1 - right
-  // 2 - down
-  // 3 - left
+  // 0 - north
+  // 1 - south
+  // 2 - east
+  // 3 - west
   signal input direction;
 
   signal output success;
@@ -30,11 +30,11 @@ template IsTileDeltaAllowed() {
   var i;
   for (i=0; i<8; i++) {
     var allowedFromType = allowed[i];
-    if (allowedFromType == fromType) {
+    if (allowedFromType == tileCode) {
       s = 1;
     }
   }
   success <-- s;
 }
 
-component main {public [fromType, direction]} = IsTileDeltaAllowed();
+component main {public [tileCode, direction]} = IsTileOpenForDirection();
