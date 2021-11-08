@@ -28,7 +28,7 @@ template IsTileOpenForDirection() {
 
   var s = 0;
   var i;
-  for (i=0; i<8; i++) {
+  for (i=0; i < 7; i++) {
     var allowedFromType = allowed[i];
     if (allowedFromType == tileCode) {
       s = 1;

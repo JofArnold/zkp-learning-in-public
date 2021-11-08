@@ -13,7 +13,7 @@ template IsMoveAllowed() {
   var from = move[0];
   var to = move[1];
   var s = 0;
-  for (i=0; i<4; i++) {
+  for (i=0; i < 3; i++) {
     var first = allowed[i][0];
     var second = allowed[i][1];
     if (first == from && second == to || second == from && first == to) {

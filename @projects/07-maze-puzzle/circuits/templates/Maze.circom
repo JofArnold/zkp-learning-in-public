@@ -10,7 +10,7 @@ template Maze() {
     7,  14, 12,  7, 12
   ];
   var i;
-  for (i = 0; i < 25; i++) {
+  for (i = 0; i < 24; i++) {
     out[i] <-- maze[i];
   }
 }
