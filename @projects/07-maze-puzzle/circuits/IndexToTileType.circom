@@ -2,7 +2,7 @@ pragma circom 2.0.0;
 
 include "./Maze.circom";
 
-template PositionToMove() {
+template IndexToTileType() {
   signal input pos;
   signal output out;
   component m = Maze();
@@ -10,4 +10,4 @@ template PositionToMove() {
   out <-- maze[pos];
 }
 
-component main {public [pos]} = PositionToMove();
+component main {public [pos]} = IndexToTileType();

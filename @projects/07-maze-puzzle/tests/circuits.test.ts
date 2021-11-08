@@ -40,8 +40,8 @@ describe("Circuit tests", () => {
     });
   });
 
-  test("PositionToMove circuit works", async () => {
-    const file = path.resolve(__dirname, "../circuits/PositionToMove.circom");
+  test("IndexToTileType circuit works", async () => {
+    const file = path.resolve(__dirname, "../circuits/IndexToTileType.circom");
     const circuit = await wasmTester(file);
 
     const promises = MAZE.map((_, i) => async () => {
