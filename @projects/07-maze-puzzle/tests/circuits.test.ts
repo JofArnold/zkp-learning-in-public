@@ -40,12 +40,15 @@ describe("Circuit tests", () => {
     });
   });
 
-  test("IndexToTileType circuit works", async () => {
-    const file = path.resolve(__dirname, "../circuits/IndexToTileType.circom");
+  test("TileTypeFromIndex circuit works", async () => {
+    const file = path.resolve(
+      __dirname,
+      "../circuits/TileTypeFromIndex.circom"
+    );
     const circuit = await wasmTester(file);
 
     const promises = MAZE.map((_, i) => async () => {
-      const witness = await circuit.calculateWitness({ pos: i }, true);
+      const witness = await circuit.calculateWitness({ index: i }, true);
       const output = witness[1];
       expect(Fr.eq(Fr.e(MAZE[i]), output)).toBe(true);
     });
