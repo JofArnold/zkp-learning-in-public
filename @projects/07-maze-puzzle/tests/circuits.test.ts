@@ -90,28 +90,28 @@ describe("Circuit tests", () => {
 
     {
       const witness = await circuit.calculateWitness(
-        { tileCode: 10, direction: 1 }, // User enters or exits tile 10 from top
+        { tileCode: 10, side: 1 }, // User enters or exits tile 10 from top
         true
       );
       expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
     }
     {
       const witness = await circuit.calculateWitness(
-        { tileCode: 10, direction: 3 },
+        { tileCode: 10, side: 3 },
         true
       );
       expect(Fr.eq(Fr.e(0), witness[1])).toBe(true);
     }
     {
       const witness = await circuit.calculateWitness(
-        { tileCode: 6, direction: 3 },
+        { tileCode: 6, side: 3 },
         true
       );
       expect(Fr.eq(Fr.e(0), witness[1])).toBe(true);
     }
     {
       const witness = await circuit.calculateWitness(
-        { tileCode: 7, direction: 2 },
+        { tileCode: 7, side: 2 },
         true
       );
       expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
@@ -142,7 +142,7 @@ describe("Circuit tests", () => {
         moves[index] = move;
       });
       const witness = await circuit.calculateWitness({ moves }, true);
-      expect(Fr.eq(Fr.e(VALID), witness[1])).toBe(true);
+      expect(Fr.eq(Fr.e(VALID), witness[1])).toBe(false);
     }
   });
 });

@@ -1,8 +1,8 @@
 pragma circom 2.0.0;
 
-include "../functions/getNextIndexForMove.circom";
-include "../functions/getTileCodeFromIndex.circom";
-include "../functions/isTileOpenForSide.circom";
+include "./GetNextIndexForMove.circom";
+include "./TileCodeFromIndex.circom";
+include "./IsTileOpenForSide.circom";
 
 function invertDirection(direction) {
     if (direction == 0) {
@@ -22,6 +22,22 @@ template Game(N) {
   // result
   signal output movesValid;
 
+  // Various utils
+  component gnis[N];
+  component currentTCFI[N];
+  component nextTCFI[N];
+  component exits[N];
+  component entrances[N];
+
+  // Build the components arrays
+  for (var i = 0; i < N; i++) {
+    gnis[i] = GetNextIndexForMove();
+    currentTCFI[i] = TileCodeFromIndex();
+    nextTCFI[i] = TileCodeFromIndex();
+    exits[i] = IsTileOpenForSide();
+    entrances[i] = IsTileOpenForSide();
+  }
+
   var currentTileCode;
   var nextTileCode;
   var currentIndex = 0;
@@ -36,21 +52,29 @@ template Game(N) {
     currentDirection = moves[m];
 
     // Get current tile type
-    currentTileCode = getTileCodeFromIndex(currentIndex);
+    currentIndex --> currentTCFI[m].index;
+    currentTileCode = currentTCFI[m].tileCode;
 
     // Check if exiting the tile in that direction is ok
-    moveOk = isTileOpenForSide(currentTileCode, currentDirection);
+    currentTileCode --> exits[m].tileCode;
+    currentDirection --> exits[m].side;
+    moveOk = exits[m].success;
     movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
 
     // Get the next index
-    nextIndex = getNextIndexForMove(currentIndex, currentDirection);
+    currentIndex --> gnis[m].from;
+    currentDirection --> gnis[m].direction;
+    nextIndex = gnis[m].nextIndex;
 
     // Get the type of tile for next index
-    nextTileCode = getTileCodeFromIndex(nextIndex);
+    nextIndex --> nextTCFI[m].index;
+    nextTileCode = nextTCFI[m].tileCode;
 
     // Check if entering in that direction is ok
     nextDirection = invertDirection(currentDirection);
-    moveOk = isTileOpenForSide(nextTileCode, nextDirection);
+    nextTileCode --> entrances[m].tileCode;
+    nextDirection --> entrances[m].side;
+    moveOk = exits[m].success;
     movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
 
     currentIndex = nextIndex;
