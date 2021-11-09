@@ -26,7 +26,6 @@ template Game(N) {
   var currentIndex = 0;
   var currentDirection;
   var movesOk = 1;
-  var moveOk;
 
   var OUT_OF_RANGE = 100;
 
@@ -37,8 +36,7 @@ template Game(N) {
       currentTileCode = getTileCodeFromIndex(currentIndex);
 
       // Check if exiting the tile in that direction is ok
-      moveOk = isTileOpenForSide(currentTileCode, currentDirection);
-      movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
+      movesOk *= isTileOpenForSide(currentTileCode, currentDirection); // I.e. if success is zero, movesOk becomes zero
 
       // Get the next index
       currentIndex = getNextIndexForMove(currentIndex, currentDirection);
