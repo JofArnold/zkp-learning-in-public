@@ -20,41 +20,34 @@ template Game(N) {
   signal input moves[N];
 
   // result
-  signal output movesValid;
+  signal output out;
 
   var currentTileCode;
-  var nextTileCode;
   var currentIndex = 0;
-  var nextIndex;
   var currentDirection;
-  var nextDirection;
   var movesOk = 1;
   var moveOk;
-  var movesEnded = 0;
+
+  var OUT_OF_RANGE = 100;
 
   for (var m = 0; m < N; m++) {
     currentDirection = moves[m];
+    if (currentDirection != OUT_OF_RANGE) {
+      // Get current tile type
+      currentTileCode = getTileCodeFromIndex(currentIndex);
 
-    // Get current tile type
-    currentTileCode = getTileCodeFromIndex(currentIndex);
+      // Check if exiting the tile in that direction is ok
+      moveOk = isTileOpenForSide(currentTileCode, currentDirection);
+      movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
 
-    // Check if exiting the tile in that direction is ok
-    moveOk = isTileOpenForSide(currentTileCode, currentDirection);
-    movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
-
-    // Get the next index
-    nextIndex = getNextIndexForMove(currentIndex, currentDirection);
-
-    // Get the type of tile for next index
-    nextTileCode = getTileCodeFromIndex(nextIndex);
-
-    // Check if entering in that direction is ok
-    nextDirection = invertDirection(currentDirection);
-    moveOk = isTileOpenForSide(nextTileCode, nextDirection);
-    movesOk *= moveOk; // I.e. if success is zero, movesOk becomes zero
-
-    currentIndex = nextIndex;
+      // Get the next index
+      currentIndex = getNextIndexForMove(currentIndex, currentDirection);
+    }
   }
 
-  movesValid <-- movesOk;
+  var isComplete = currentIndex == 24 ? 1 : 0;
+
+  var result = isComplete * movesOk == 1 ? 2 : movesOk;
+
+  out <-- result;
 }

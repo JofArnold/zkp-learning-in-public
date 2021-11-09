@@ -125,9 +125,29 @@ describe("Circuit tests", () => {
     const INVALID = 0;
     const VALID = 1;
     const COMPLETE = 2;
-    // Invalid
+    const MAX_MOVES = 20;
+    const OUT_OF_RANGE = 100;
+    // Valid and incomplete
     {
-      const moves = Array(12).fill(-1); // Sparse array of moves
+      const moves = Array(MAX_MOVES).fill(OUT_OF_RANGE); // Sparse array of moves
+      [1, 1, 0, 3].forEach((move, index) => {
+        moves[index] = move;
+      });
+      const witness = await circuit.calculateWitness({ moves }, true);
+      expect(Fr.eq(Fr.e(VALID), witness[1])).toBe(true);
+    }
+    // Invalid and incomplete
+    {
+      const moves = Array(MAX_MOVES).fill(OUT_OF_RANGE); // Sparse array of moves
+      [1, 5, 0, 3].forEach((move, index) => {
+        moves[index] = move;
+      });
+      const witness = await circuit.calculateWitness({ moves }, true);
+      expect(Fr.eq(Fr.e(INVALID), witness[1])).toBe(true);
+    }
+    // Invalid and complete
+    {
+      const moves = Array(MAX_MOVES).fill(OUT_OF_RANGE);
       // second move is invalid
       [1, 7, 0, 3, 0, 0, 1, 2, 1, 0, 0, 1].forEach((move, index) => {
         moves[index] = move;
@@ -137,12 +157,12 @@ describe("Circuit tests", () => {
     }
     // Valid and complete
     {
-      const moves = Array(12).fill(-1); // Sparse array of moves
+      const moves = Array(MAX_MOVES).fill(OUT_OF_RANGE);
       [1, 1, 0, 3, 0, 0, 1, 2, 1, 0, 0, 1].forEach((move, index) => {
         moves[index] = move;
       });
       const witness = await circuit.calculateWitness({ moves }, true);
-      expect(Fr.eq(Fr.e(VALID), witness[1])).toBe(false);
+      expect(Fr.eq(Fr.e(COMPLETE), witness[1])).toBe(true);
     }
   });
 });
