@@ -6,9 +6,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "circuits:compile": "node ./circuits/compile.js"
   },
   "dependencies": {
+    "@projects/utils": "1.0.0",
     "@types/jest": "27.0.2",
     "blake-hash": "2.0.0",
     "circom_tester": "0.0.7",

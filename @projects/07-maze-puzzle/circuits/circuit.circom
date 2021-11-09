@@ -50,4 +50,4 @@ template Game(N) {
   out <-- result;
 }
 
-component main {public [moves]} = Game(20);
+component main = Game(20);

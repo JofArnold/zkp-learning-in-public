@@ -119,7 +119,7 @@ describe("Circuit tests", () => {
   });
 
   test("Game circuit works", async () => {
-    const file = path.resolve(__dirname, "../circuits/Game.circom");
+    const file = path.resolve(__dirname, "../circuits/circuit.circom");
     const circuit = await wasmTester(file);
 
     const INVALID = 0;

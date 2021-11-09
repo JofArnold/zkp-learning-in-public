@@ -5,6 +5,7 @@
 *.wasm
 *.sym
 *.wtns
+*.key
 verification_key.json
 proof.json
-zk/circom
+circuits/circuit_js
