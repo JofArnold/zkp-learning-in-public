@@ -18,18 +18,6 @@ const MAZE = [
 ];
 
 describe("Circuit tests", () => {
-  test("Basic array circuit works", async () => {
-    const file = path.resolve(__dirname, "../circuits/Array.circom");
-    const circuit = await wasmTester(file);
-
-    const array = [10, 20, 30, 40, 50];
-    const witness = await circuit.calculateWitness({ in: array }, true);
-    const outputs: number[] = witness.slice(1, 6);
-    outputs.forEach((output, i) => {
-      expect(Fr.eq(Fr.e((array[i] as number) + 3), output)).toBe(true);
-    });
-  });
-
   test("Maze array circuit works", async () => {
     const file = path.resolve(__dirname, "../circuits/Maze.circom");
     const circuit = await wasmTester(file);
@@ -127,24 +115,6 @@ describe("Circuit tests", () => {
         true
       );
       expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
-    }
-  });
-
-  test("IsMoveAllowed circuit works", async () => {
-    const file = path.resolve(__dirname, "../circuits/IsMoveAllowed.circom");
-    const circuit = await wasmTester(file);
-
-    {
-      const witness = await circuit.calculateWitness({ move: [10, 14] }, true);
-      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
-    }
-    {
-      const witness = await circuit.calculateWitness({ move: [14, 10] }, true);
-      expect(Fr.eq(Fr.e(1), witness[1])).toBe(true);
-    }
-    {
-      const witness = await circuit.calculateWitness({ move: [1, 14] }, true);
-      expect(Fr.eq(Fr.e(1), witness[1])).toBe(false);
     }
   });
 
