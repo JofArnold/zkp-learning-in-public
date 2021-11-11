@@ -1,4 +1,3 @@
-console.log(111111);
 const { exec } = require("child_process");
 const { program } = require("commander");
 program

@@ -25,7 +25,8 @@
       "circomlibjs",
       "circom",
       "circomlib",
-      "snarkjs"
+      "snarkjs",
+      "@projects/utils"
     ]
   }
 }
