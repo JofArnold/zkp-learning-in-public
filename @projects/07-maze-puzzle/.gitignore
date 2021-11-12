@@ -1,0 +1,11 @@
+# ZK build artefacts
+*.ptau
+*.zkey
+*.r1cs
+*.wasm
+*.sym
+*.wtns
+*.key
+verification_key.json
+proof.json
+circuits/circuit_js

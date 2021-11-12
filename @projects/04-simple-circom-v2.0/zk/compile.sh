@@ -16,7 +16,7 @@ fi
 # - circuit.r1cs: the r1cs constraint system of the circuit in binary format
 # - circuit_js folder: wasm and witness tools
 # - circuit.sym: a symbols file required for debugging and printing the constraint system in an annotated mode
-./circom circuit.circom --r1cs --wasm  --sym
+circom circuit.circom --r1cs --wasm  --sym
 
 # Optional - view circuit state info
 # yarn snarkjs r1cs info ./zk/circuit.r1cs
