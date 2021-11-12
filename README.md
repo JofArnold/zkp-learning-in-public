@@ -36,3 +36,7 @@ WIP
 ### 6) Example Circom operators and their outputs
 
 Code: [06-circom-math](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/06-circom-math)
+
+### 7) Simple ZKP 5x5 maze game
+
+Code: [07-maze-puzzle](https://github.com/JofArnold/zkp-learning-in-public/tree/main/%40projects/07-maze-puzzle)
