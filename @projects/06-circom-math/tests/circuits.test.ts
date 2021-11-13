@@ -12,14 +12,17 @@ describe("test", () => {
     const file = path.resolve(__dirname, "../circuits/IsZero.circom");
     const circuit = await wasmTester(file);
 
-    let witness;
-    witness = await circuit.calculateWitness({ in: 111 }, true);
-    expect(Fr.eq(Fr.e(witness[0]), Fr.e(1))).toBe(true);
-    expect(Fr.eq(Fr.e(witness[1]), Fr.e(0))).toBe(true);
+    {
+      const witness = await circuit.calculateWitness({ in: 111 }, true);
+      expect(Fr.eq(Fr.e(witness[0]), Fr.e(1))).toBe(true);
+      expect(Fr.eq(Fr.e(witness[1]), Fr.e(0))).toBe(true);
+    }
 
-    witness = await circuit.calculateWitness({ in: 0 }, true);
-    expect(Fr.eq(Fr.e(witness[0]), Fr.e(1))).toBe(true);
-    expect(Fr.eq(Fr.e(witness[1]), Fr.e(1))).toBe(true);
+    {
+      const witness = await circuit.calculateWitness({ in: 0 }, true);
+      expect(Fr.eq(Fr.e(witness[0]), Fr.e(1))).toBe(true);
+      expect(Fr.eq(Fr.e(witness[1]), Fr.e(1))).toBe(true);
+    }
   });
 
   it("Should create a Add circuit", async () => {
@@ -138,6 +141,59 @@ describe("test", () => {
       //          111
       // = 7
       expect(Fr.eq(Fr.e(output), Fr.e(7))).toBe(true);
+    }
+  });
+
+  it("Should create a AssertAssign circuit", async () => {
+    const file = path.resolve(__dirname, "../circuits/AssertAssign.circom");
+    const circuit = await wasmTester(file);
+
+    {
+      const witness = await circuit.calculateWitness({ in: 29 }, true);
+      // Check outputs are 1,29,29
+      [1, 29, 29].forEach((v, i) => {
+        const output = witness[i];
+        expect(Fr.eq(Fr.e(output), Fr.e(v))).toBe(true);
+      });
+    }
+  });
+
+  it("Should create a AssertAssignPrivate circuit", async () => {
+    const file = path.resolve(
+      __dirname,
+      "../circuits/AssertAssignPrivate.circom"
+    );
+    const circuit = await wasmTester(file);
+
+    {
+      const witness = await circuit.calculateWitness({ in: 29 }, true);
+      // Check outputs are 1,29,29
+      [1, 29].forEach((v, i) => {
+        const output = witness[i];
+        expect(Fr.eq(Fr.e(output), Fr.e(v))).toBe(true);
+      });
+    }
+  });
+
+  it("Should create a Assert circuit", async () => {
+    const file = path.resolve(__dirname, "../circuits/Assert.circom");
+    const circuit = await wasmTester(file);
+
+    {
+      const witness = await circuit.calculateWitness({ in: 29 }, true);
+      // Check the outputs are 1 and 29
+      [1, 29].forEach((v, i) => {
+        const output = witness[i];
+        expect(Fr.eq(Fr.e(output), Fr.e(v))).toBe(true);
+      });
+    }
+    {
+      // Check that it throws an error if the input is not 29
+      try {
+        await circuit.calculateWitness({ in: 28 }, true);
+      } catch (e: any) {
+        expect(e.message).toMatch("Assert Failed");
+      }
     }
   });
 });
