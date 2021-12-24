@@ -1,0 +1,13 @@
+# ZK build artefacts
+*.ptau
+*.zkey
+*.r1cs
+*.wasm
+*.sym
+*.wtns
+verification_key.json
+proof.json
+circuits/**/circuit_*.key
+circuits/**/circuit_js
+circuits/**/public.json
+circuits/**/circom
